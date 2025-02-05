@@ -158,7 +158,7 @@ with col7:
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 #
 if st.session_state.history:
-    st.image("separator-c.png")
+    st.image("separator-c.jpg")
     sujet, type, age, nombre, contenu = st.session_state.history[-1]  	# Dernière réponse générée
     st.subheader(sujet)                    								# Affiche le sujet (ex: "📝 " + "L'eau")
     st.markdown(f":blue[*{type} - {nombre} élèves, {age} ans.*]")       # Affiche le type  (ex: "📜 " + "Proposition de cours")

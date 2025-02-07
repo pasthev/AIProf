@@ -6,7 +6,7 @@ AIProf est une application Streamlit qui assiste les enseignants dans la prépar
 
 ## Capture d'écran
 
-![AIProf Screenshot](aiprof.jpg)
+![AIProf Screenshot](AIProf.jpg)
 
 ## Fonctionnalités
 

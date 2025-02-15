@@ -1,6 +1,6 @@
 # A.I. Prof - Votre Assistant d'Enseignement Intelligent
 
-[Click here for English](README-EN.md)
+[Click here for English](README_EN.md)
 
 
 [![Source sur GitHub](pics/aiprof01.png)](https://aiprof-pasthev.streamlit.app/)

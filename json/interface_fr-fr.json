@@ -1,0 +1,134 @@
+{
+    "texts": {
+        "app_cntry": "France",
+        "app_title": "A.I. Prof",
+        "app_sbtle": "*Aide à la préparation de cours*",
+        "app_stext": ":blue[**Assistance à la préparation d’apprentissages avec Monsieur Humain — un vrai prof, pas un de ces satanés trucs synthétiques.**]",
+        "app_shelp": "*À savoir : les boutons Exercices, Ateliers, Révision, Devoirs, et Quizz généreront des résultats en rapport direct avec le dernier cours créé avec les mêmes paramètres, si vous avez préalablement généré ce cours.*",
+        "app_gttxt": "Aide et code source sur GitHub",
+        "app_gthub": "https://github.com/pasthev/AIProf",
+        "app_crdts": "A.I. Prof - pasthev 2025",
+        "app_lnhlp": "Langue de l'application",
+        "app_plhlp": "Choix du pote",
+        "app_lthlp": "Quand il ne sait pas un truc, M. Humain demande parfois à un copain. Choisissez lequel :",
+        "app_warng": ":red[🧠 *Rappel : M. Humain n’étant pas un robot, il peut parfois halluciner et dire n’importe quoi.*]",
+        "lbl_age": "Âge des élèves :",
+        "lbl_nbr": "Nombre d’élèves :",
+        "lbl_mde": "Mode :",
+        "lbl_lng": "🌍 Langue",
+        "lbl_sbj": "📋 Sujet d’apprentissage :",
+        "lbl_rnd": "🎲",
+        "lbl_smt": "Matières",
+        "lbl_ssj": "Sujets",
+        "lbl_slb": "Libre",
+        "lbl_ins": "facultatif - Consignes particulières à respecter :",
+        "lbl_inm": "facultatif - Choix spécifique dans cette matière ou consignes particulières, durée, etc. :",
+        "lbl_prv": "⬅ Précédent",
+        "lbl_nxt": "Suivant ➡",
+        "lbl_hst": "Historique ",
+        "lbl_lck": "🔒",
+        "lbl_ulk": "🔓",
+        "lbl_del": "🗑️ Effacer l’historique",
+        "lbl_spn": "🧠⏳",
+        "lbl_key": "Assez utilisé ma clé API ? entrez la vôtre :",
+        "lbl_ktx": "Où est ma clé ?",
+        "lbl_kyw": "https://ai.google.dev/gemini-api/docs/api-key"
+    },
+    "help": {
+        "age": "Change les sujets d’apprentissage préenregistrés, et dicte le niveau des cours",
+        "nbr": "Utile pour l’organisation des cours et des ateliers",
+        "mod": "Sujets aléatoires ou matières de l’Éducation Nationale",
+        "sbj": "Faites un choix dans la liste. Pour saisir votre propre sujet d’apprentissage, cochez ’Libre’ ci-dessus",
+        "hsl": "Tapez un sujet. Par exemple : Les fleuves de France",
+        "spc": "Par exemple : Bien insister sur ce qui définit un fleuve",
+        "spm": "Tapez un sujet particulier à explorer dans cette matière",
+        "rnd": "Choix aléatoire dans la tranche d’âge et le mode sélectionnés",
+        "lck": "Bascule et verrouille l’état déroulé ou enroulé de l’historique",
+        "key": "Gemini a besoin d'une clé API pour fonctionner. À défaut d'une clé déjà enregistrée dans vos variables d'environnement, cette application utilise une clé partagée, qui peut saturer sous la demande. Ce champ vous permet de saisir votre propre clé, qui sera utilisée pour cette session.",
+        "kts": "Tester et valider la clé saisie",
+        "kcn": "Revenir à la clé pré-enregistrée"
+    },
+    "buttons": {
+        "course": {
+            "label": "Cours",
+            "prompt": "Propose-moi un modèle pédagogique détaillé pour donner un cours explicatif, sans exercices ni ateliers,{l_subject}{l_special}{l_public}{l_headcount}{l_remed}{l_country}",
+            "help": "Générer un cours sur la matière ou le sujet choisi",
+            "icon": "📖"
+        },
+        "memo": {
+            "label": "Mémo",
+            "prompt": "Propose-moi un mémo structuré, destiné à l’enseignant, listant les connaissances principales{l_subject}{l_public}{l_special}{l_country}",
+            "help": "Générer un pense-bête pour l’enseignant sur la matière ou le sujet choisi",
+            "icon": "📝"
+        },
+        "exercises": {
+            "label": "Exercices",
+            "prompt": "Propose-moi des exercices pratiques{l_subject}{l_public}{l_special}{l_answers}{l_country}",
+            "help": "Se référera directement au dernier cours créé avec les mêmes paramètres, s’il a été préalablement généré",
+            "icon": "✏️"
+        },
+        "workshops": {
+            "label": "Ateliers",
+            "prompt": "Propose-moi un modèle d’atelier pédagogique en sous-groupes{l_subject}{l_public}{l_headcount}{l_special}{l_country}",
+            "help": "Se référera directement au dernier cours créé avec les mêmes paramètres, s’il a été préalablement généré",
+            "icon": "🔬"
+        },
+        "revision": {
+            "label": "Révision",
+            "prompt": "Propose-moi un plan de révision{l_subject}{l_public}{l_special}{l_country}",
+            "help": "Se référera directement au dernier cours créé avec les mêmes paramètres, s’il a été préalablement généré",
+            "icon": "📚"
+        },
+        "homework": {
+            "label": "Devoirs",
+            "prompt": "Rédige des devoirs à la maison sous forme de 3 à 5 exercices prêts à présenter{l_subject}{l_public}{l_special}{l_answers}{l_country}",
+            "help": "Se référera directement au dernier cours créé avec les mêmes paramètres, s’il a été préalablement généré",
+            "icon": "🏠"
+        },
+        "quiz": {
+            "label": "Quizz",
+            "prompt": "Rédige un quizz prêt à présenter{l_subject}{l_public}{l_special}{l_answers}{l_country}",
+            "help": "Se référera directement au dernier cours créé avec les mêmes paramètres, s’il a été préalablement généré",
+            "icon": "❓"
+        }
+    },
+    "prompts": {
+        "empty_subject": "Entrer un sujet -> 📋",
+        "topic": " sur le sujet suivant : [{t_topic}].",
+        "subject": " sur un sujet de ton choix relevant de la matière scolaire suivante : [{t_subject}]. Indique en titre la matière et le sujet que tu as choisis dans cette matière.",
+        "public": " Adapte le niveau pour des élèves âgés de {t_age} ans.",
+        "appropriate": " Commence ta réponse par un petit paragraphe intitulé 'Pertinence du sujet' dans lequel tu indiques si tu estimes ce sujet approprié ou trop avancé pour commencer à l'enseigner à des élèves de cet âge. Ajoute ensuite une hline après ce paragraphe pour le séparer de la suite.",
+        "solution": " À la fin de ta réponse, insère une hline puis un titre gras 'Réponses pour l’enseignant', et indique la liste des réponses correctes.",
+        "number": " La classe compte {t_headcount} élèves.",
+        "remediation": " Termine en ajoutant un paragraphe intitulé 'Remédiations' dans lequel tu décriras des explications alternatives destinée à aider des élèves qui ne comprendraient pas certaines parties expliquées dans ce cours.",
+        "special": " Consigne particulière à respecter : {t_special}.",
+        "override": " faisant suite au cours préalablement donné :  \n[\n{course}\n]\n>",
+        "country": " L'ensemble doit être rédigé en tenant compte des spécifités linguistiques et culturelles du pays suivant : {t_country}.",
+        "students": " élèves",
+        "old": " ans."
+    },
+    "errors": {
+        "filenotfound": "Erreur : Fichier JSON '{f}' non trouvé dans le répertoire.",
+        "jsonnotfound": "Erreur lors de la recherche des fichiers JSON : {e}",
+        "jsondecoderr": "Erreur : Fichier JSON '{f}' corrompu ou malformé.",
+        "jsonexcption": "Erreur inattendue lors du chargement du fichier JSON '{f}': {e}",
+        "geminiapikey": "Erreur : Clé API Gemini non trouvée dans les secrets Streamlit (secrets.toml). Veuillez configurer votre clé API.",
+        "geminiexcptn": "Erreur lors de la configuration de l'API Gemini : {e}",
+        "geminicllerr": "Erreur lors de la génération du contenu : {e}",
+        "geminicller2": "Erreur lors de la génération du contenu par l'API Gemini."
+    },
+    "grades": {
+        "6": "CP (Cycle 2)",
+        "7": "CE1 (Cycle 2)",
+        "8": "CE2 (Cycle 2)",
+        "9": "CM1 (Cycle 3)",
+        "10": "CM2 (Cycle 3)",
+        "11": "6ème (Cycle 3)",
+        "12": "5ème (Cycle 4)",
+        "13": "4ème (Cycle 4)",
+        "14": "3ème (Cycle 4)",
+        "15": "2nde",
+        "16": "1ère",
+        "17": "Terminale"
+    }
+}

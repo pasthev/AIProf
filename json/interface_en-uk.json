@@ -1,0 +1,134 @@
+{
+	"texts": {
+		"app_cntry": "United Kingdom",
+		"app_title": "A.I. Prof",
+		"app_sbtle": "*Course Preparation Assistance*",
+		"app_stext": ":blue[**Assistance in preparing lessons with Mr. Human, a real teacher, not one of those darn synthetic craps.**]",
+		"app_shelp": "*Usage: The buttons Exercises, Workshops, Revision, Homework, and Quiz will generate results directly related to the last lesson created with the same parameters, if you have previously generated this lesson.*",
+        "app_gttxt": "Source code on GitHub",
+        "app_gthub": "https://github.com/pasthev/AIProf",
+		"app_crdts": "A.I. Prof - pasthev 2025",
+		"app_lnhlp": "Application language",
+		"app_plhlp": "Buddy choice",
+		"app_lthlp": "When he doesn't know something, Mr. Human may occasionally ask a friend. Choose which one:",
+		"app_warng": ":red[🧠 *Reminder: Since Mr. Human is not a robot, he may sometimes hallucinate and say nonsense.*]",
+		"lbl_age": "Students’ age:",
+		"lbl_nbr": "Number of students:",
+		"lbl_mde": "Mode",
+		"lbl_lng": "🌍 Language",
+		"lbl_sbj": "📋 Learning subject:",
+		"lbl_rnd": "🎲",
+		"lbl_smt": "Subjects",
+		"lbl_ssj": "Prefilled",
+		"lbl_slb": "Free",
+		"lbl_ins": "Specific instructions to follow (optional):",
+		"lbl_inm": "Specific topic on this subject or special instructions, duration, etc. (optional):",
+		"lbl_prv": "⬅ Previous",
+		"lbl_nxt": "Next ➡",
+		"lbl_hst": "History ",
+		"lbl_lck": "🔒",
+        "lbl_ulk": "🔓",
+		"lbl_del": "🗑️ Clear history",
+		"lbl_spn": "🧠⏳",
+        "lbl_key": "Enough using my API Key? Use yours:",
+        "lbl_ktx": "Where's my key?",
+        "lbl_kyw": "https://ai.google.dev/gemini-api/docs/api-key"
+	},
+	"help": {
+		"age": "Changes the pre-registered learning topics and determines the course level",
+		"nbr": "Useful for organizing courses and workshops",
+		"mod": "Random topics or subjects from the National Education curriculum",
+		"sbj": "Make a choice in the list. To type your own topic, select ’Free’ above",
+		"hsl": "Type a subject of your choice. For example: The rivers of North America",
+		"spc": "For example: Emphasize what defines a river",
+		"spm": "Type a particular topic you want to explore on this subject",
+		"rnd": "Random selection within the chosen age range and mode",
+		"lck": "Toggles and locks the expanded or collapsed state of the history",
+        "key": "Gemini requires an API key to function. If no key is already saved in your environment variables, this application uses a shared key, which may become saturated under demand. This field allows you to enter a key that will be used for this session.",
+        "kts": "Test and validate the entered key",
+        "kcn": "Revert to the pre-recorded key"
+    },
+	"buttons": {
+		"course": {
+			"label": "Course",
+			"prompt": "Provide me with a detailed pedagogical model for delivering an explanatory lesson, without exercises or workshops, {l_subject}{l_special}{l_public}{l_headcount}{l_remed}{l_country}",
+			"help": "Generate a lesson on the chosen subject or topic",
+			"icon": "📖"
+		},
+		"memo": {
+			"label": "Memo",
+			"prompt": "Provide me with a structured memo for the teacher, listing the main knowledge points{l_subject}{l_public}{l_special}{l_country}",
+			"help": "Generate a teacher’s cheat sheet on the chosen subject or topic",
+			"icon": "📝"
+		},
+		"exercises": {
+			"label": "Exercises",
+			"prompt": "Provide me with practical exercises{l_subject}{l_public}{l_special}{l_answers}{l_country}",
+			"help": "Will relate to the last created lesson with the same parameters, if such a course has been generated",
+			"icon": "✏️"
+		},
+		"workshops": {
+			"label": "Workshp",
+			"prompt": "Provide me with a pedagogical workshop model in small groups{l_subject}{l_public}{l_headcount}{l_special}{l_country}",
+			"help": "Will relate to the last created lesson with the same parameters, if such a course has been generated",
+			"icon": "🔬"
+		},
+		"revision": {
+			"label": "Revision",
+			"prompt": "Provide me with a revision plan{l_subject}{l_public}{l_special}{l_country}",
+			"help": "Will relate to the last created lesson with the same parameters, if such a course has been generated",
+			"icon": "📚"
+		},
+		"homework": {
+			"label": "Homwrk",
+			"prompt": "Create homework in the form of 3 to 5 ready-to-present exercises{l_subject}{l_public}{l_special}{l_answers}{l_country}",
+			"help": "Will relate to the last created lesson with the same parameters, if such a course has been generated",
+			"icon": "🏠"
+		},
+		"quiz": {
+			"label": "Quiz",
+			"prompt": "Create a ready-to-present quiz{l_subject}{l_public}{l_special}{l_answers}{l_country}",
+			"help": "Will relate to the last created lesson with the same parameters, if such a course has been generated",
+			"icon": "❓"
+		}
+	},
+	"prompts": {
+		"empty_subject": "Enter a topic -> 📋",
+		"topic": " on the following topic: [{t_topic}].",
+		"subject": " on a topic of your choice related to the following school subject: [{t_subject}]. Indicate in the title the subject and the topic you have chosen within this subject.",
+		"public": " Adapt the level for students aged {t_age} years.",
+		"appropriate": " Start your response with a short paragraph titled 'Relevance of the topic' in which you state whether you consider this topic appropriate or too advanced to begin teaching students of this age. Add a hline after this paragraph to separate it from the rest.",
+		"solution": " At the end of your response, insert a horizontal line and then a bold title 'Answers for the teacher', listing the correct answers.",
+		"number": " The class consists of {t_headcount} students.",
+		"remediation": "Conclude by adding a paragraph titled 'Remediation' where you will describe alternative explanations to help students who may not understand certain parts explained in this course.",
+		"special": " Specific instruction to follow: {t_special}.",
+		"override": " following the previously given lesson:  \n[\n{course}\n]\n>",
+        "country": " The text must be written taking into account the linguistic and cultural specificities of the following country: {t_country}.",
+		"students": " students",
+		"old": " years old."
+	},
+	"errors": {
+		"filenotfound": "Error: JSON file '{f}' not found in the directory.",
+		"jsonnotfound": "Error searching for JSON files: {e}",
+		"jsondecoderr": "Error: JSON file '{f}' corrupted or malformed.",
+		"jsonexcption": "Unexpected error loading JSON file '{f}': {e}",
+		"geminiapikey": "Error: Gemini API key not found in Streamlit secrets (secrets.toml). Please configure your API key.",
+		"geminiexcptn": "Error configuring Gemini API: {e}",
+		"geminicllerr": "Error generating content: {e}",
+		"geminicller2": "Error generating content upon Gemini API call."
+	},
+	"grades": {
+		"6": "Reception (Early Years Foundation Stage)",
+		"7": "Year 1 Key Stage 1",
+		"8": "Year 2 Key Stage 1",
+		"9": "Year 3 Key Stage 2",
+		"10": "Year 4 Key Stage 2",
+		"11": "Year 5 Key Stage 2",
+		"12": "Year 6 Key Stage 2",
+		"13": "Year 7 Key Stage 3",
+		"14": "Year 8 Key Stage 3",
+		"15": "Year 9 Key Stage 3",
+		"16": "Year 10 Key Stage 4",
+		"17": "Year 11 Key Stage 4"
+	}
+}

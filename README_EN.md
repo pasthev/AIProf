@@ -82,9 +82,9 @@ Using **A.I. Prof** is simple and intuitive:
 
 ## Overview of Proposed Results
 
-[![Source on GitHub](screenshots/aiprof_screenshot_03.jpg)](https://aiprof-pasthev.streamlit.app/)
-
 [![Source on GitHub](screenshots/aiprof_screenshot_04.jpg)](https://aiprof-pasthev.streamlit.app/)
+
+[![Source on GitHub](screenshots/aiprof_screenshot_03.jpg)](https://aiprof-pasthev.streamlit.app/)
 
 ---
 

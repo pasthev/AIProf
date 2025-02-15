@@ -2,8 +2,7 @@
 # A.I. Prof
 # https://aiprof-pasthev.streamlit.app/ / https://github.com/pasthev/AIProf
 #
-# 
-# Exécuter l'application avec : streamlit run AIProf.py ou python -m streamlit run AIProf.py
+# Teaching assistance using Gemini
 #
 import streamlit as st
 import google.generativeai as genaipro
@@ -33,7 +32,7 @@ def load_json(filename):
         return None
 #
 # ------------------------------------------------------------------------------------------------------------------------------------------------
-# Add pictures folder pathname to filename
+# Add picture folder pathname to filename
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 def pic_path(filename):
     fullpath = os.path.join(PICTURES_PATH, filename)
@@ -71,7 +70,7 @@ def detect_available_languages():
 # Conditional logging
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 def warning(message):
-	if log:
+	if LOG:
 		st.warning(message)
 #
 # ------------------------------------------------------------------------------------------------------------------------------------------------
@@ -109,31 +108,40 @@ def initialize_session_state():
         st.session_state.history = []
     if "history_index" not in st.session_state:		# response history index
         st.session_state.history_index = -1			#   -1 means no response has been recorded yet
+    if "gemini_api_key" not in st.session_state:    # Initializes Gemini API key source at startup
+        s_key = os.environ.get("GEMINI_API_KEY")    # Checks for system environment variable first
+        if s_key:                                   # If system API key exists, use it
+            st.session_state.gemini_api_key = s_key # (we only store user keys in st.session_state)
+        else:                                       # Otherwise, fallback to st.secrets
+            st.session_state.gemini_api_key = ""    #
 #
 # ------------------------------------------------------------------------------------------------------------------------------------------------
-# Configure Gemini Pro (old) API and return the GenerativeModel, and handles potential errors
-# Raises GeminiAPIError if there is an error calling the Gemini API.
+# Gemini API key test to check new API key submitted by user
 # ------------------------------------------------------------------------------------------------------------------------------------------------
-def configure_geminipro_api():
+#
+def test_api_key_validity(api_key_to_test):
     try:
-        api_key = st.secrets["API_KEY"]
-        genaipro.configure(api_key=api_key)
-        model = genaipro.GenerativeModel("gemini-pro")
-        return model                                    # Return the configured model if successful
-    except KeyError:                                    # Error if API_KEY is not found in secrets
-        st.error(j_err["geminiapikey"])
-        return None
-    except Exception as e:                              # Catch any other configuration errors
-        st.error(j_err["geminiexcptn"].format(e=e))
-        return None
+        genaipro.configure(api_key=api_key_to_test)     # Configure librairy with test key
+        model = genaipro.GenerativeModel("gemini-pro")  # Instance a model
+        response = model.generate_content(              # Minimal API call, just to  
+            "This is a test to validate the API key.")  #   see if an error is triggered
+        return True                                     # No error: key is valid
+    except Exception as e:                              # Case of an invalid key
+        return False                                    #
+
 #
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 # Gemini API call and handle potential errors
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 #
 def call_gemini_api(full_prompt):
-    if current_llm == GEMINI_PRO:
+    api_key_to_use = st.session_state.gemini_api_key            # Default to user-provided or system key
+    if not api_key_to_use:                                      # If no user key in session state,
+        api_key_to_use = st.secrets["API_KEY"]                  # fallback to st.secrets
+    if current_llm == GEMINI_PRO:                               # Basic Gemini Pro request
         try:
+            genaipro.configure(api_key=api_key_to_use)          # Configure Gemini Pro API with selected key
+            model = genaipro.GenerativeModel("gemini-pro")      # Configure Gemini Pro Model
             response = model.generate_content(full_prompt)      # API call
             return response.text                                # Return the generated text if successful
         except Exception as e:                                  # Catch API call errors
@@ -141,11 +149,13 @@ def call_gemini_api(full_prompt):
             st.error(j_err["geminicllerr"].format(e=e))         # Message for user
         raise GeminiAPIError(error_message) from e              # Raise custom exception, and encapsulates
         
-    elif current_llm == GEMINI_FLS:
-        client = genai.Client(api_key=st.secrets["API_KEY"], 
+    elif current_llm == GEMINI_FLS:                             # Alternate Gemini advanced model
+        client = genai.Client(api_key=api_key_to_use,           # Model configuration 
                         http_options={'api_version':'v1alpha'})
         try:
-            response = client.models.generate_content(model='gemini-2.0-flash-thinking-exp', contents=full_prompt)        # API call
+            response = client.models.generate_content(          # API call
+                        model='gemini-2.0-flash-thinking-exp',
+                        contents=full_prompt)
             return response.text                                # Return the generated text if successful
         except Exception as e:                                  # Catch API call errors
             error_message = f"Gemini API error: {e}"            # Message for log
@@ -163,14 +173,15 @@ def generate_content(button_name):
             if button_name in {"exercises", "workshops", "revision", "homework", "quiz"}: 	# In history for the concerned types,
                 if course := find_related_course(i_subject, i_age, i_headcount):			# Does a course exists with input vals (Walrus operator)
                     subject_override = j_prompt["override"].format(course=course) 			# " following the previous course"
-            # Generation and saving
-            full_prompt = data["prompt"].format(
+
+            full_prompt = data["prompt"].format(                                            # Generation and saving
                                                 l_subject=subject_override, 
                                                 l_public=c_public, 
                                                 l_headcount=c_headcount, 
                                                 l_special=c_special, 
                                                 l_answers=answers,
-                                                l_remed=remediation
+                                                l_remed=remediation,
+                                                l_country=country
                                                )
 #
             with st.spinner(j_texts["lbl_spn"]):	            # 🧠⏳ from json with spinner
@@ -189,9 +200,20 @@ def generate_content(button_name):
         else:
             st.warning(j_prompt["empty_subject"])
 #
+#
+#
+#
+#
+#
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 # ************ Code start *************
 # ------------------------------------------------------------------------------------------------------------------------------------------------
+#
+#
+#
+#
+#
+#
 #
 LOG = False                             # If LOG = True, full prompt will be displayed before each answer
 JSON_PATH = "json"  					# JSON folder location
@@ -220,32 +242,42 @@ j_grades = interface["grades"]		    # School grade names
 j_stud = j_prompt["students"]			# Single variable to simplify code (j_stud = " students" or " élèves")
 j_old = j_prompt["old"]					# Single variable to simplify code (j_old = " years old." or " ans.")
 #
-model = configure_geminipro_api()          # Configure API and get the model
-if model is None:                       # If configuration failed, stop the app or handle it appropriately
-    st.stop()                           # Stop the app if API config fails
 #
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 # Sidebar
 # ------------------------------------------------------------------------------------------------------------------------------------------------
+#
 with st.sidebar:
     st.title("⚙️ " + j_texts["app_title"])      # Sidebar Title
     st.markdown(j_texts["app_shelp"])           # Short help message
+    
+    rght="<p style='text-align:right;text-decoration:none;font-style: italic;'>"    # Github link ************************************************
+    cntr="<p style='text-align:center; font-style: italic;'>"                       # This one for app credits (centered style)
+    link=j_texts['app_gthub']                                                       # in a pathetic attempt to keep the code clean
+    text=j_texts['app_gttxt']                                                       # (Streamlit doesn't allow to remove underline
+    st.markdown(f"{rght}<a href='{link}'>{text}</a></p>", unsafe_allow_html=True)   # unless ext css is used)
 
-    # st.markdown("---")                          # Generates hline
+    st.image(pic_path("sepline.png"))
 
-    st.subheader(j_texts["app_lnhlp"])          # Title for LLM choice
-    available_languages = detect_available_languages()
-    selected_language = st.selectbox("🌍 ...",												# Requires hardcoding: can't use j_texts["lbl_lng"]
-                                     available_languages,
-                                    index=available_languages.index(st.session_state.lang)
-                                    if st.session_state.lang in available_languages else 0, # Defaults to first language if current not found
-                                     key="language_selectbox",
-                                     label_visibility="collapsed"
-                                    )
+    st.subheader(j_texts["app_lnhlp"])          # Language title *********************************************************************************
+    col_country, col_lang = st.columns([2, 1])	#  
+    with col_country:
+        st.text(j_texts["app_cntry"])			# Country name 
+    with col_lang:
+        available_languages = detect_available_languages()
+        selected_language = st.selectbox("🌍 ...",											# Requires hardcoding: can't use j_texts["lbl_lng"]
+                                         available_languages,
+                                        index=available_languages.index(st.session_state.lang)
+                                        if st.session_state.lang in available_languages else 0, # Defaults to first language if current not found
+                                         key="language_selectbox",
+                                         label_visibility="collapsed"
+                                        )
     if selected_language != st.session_state.get("lang", DEFAULT_LANG):                     # Set a default for first app run
         st.session_state.subject_index = 0                                                  # Easier to prevent index errors with list lengths
         st.session_state.lang = selected_language
         st.rerun()                                                                          # Reloads page to refresh language
+
+    st.image(pic_path("sepline.png"))
 
     st.subheader(j_texts["app_plhlp"])          # Title for LLM choice
     current_llm_selection = st.radio(           # Label for radio buttons
@@ -256,14 +288,34 @@ with st.sidebar:
 
     if current_llm_selection != current_llm:    # If a new model is selected
         current_llm = current_llm_selection     # Select new current_llm
-        # st.session_state.model_changed = True   # Optional : store info about model change
-        # st.rerun()                              # Reload to apply new model
 
-    st.markdown("---")                          # Generates hline
-    st.markdown(j_texts["app_gthub"])           # GitHub link
-    st.markdown(j_texts["app_crdts"])           # Credits info
+    gemini_api_key_input = st.text_input(       # User key input *********************************************************************************
+                j_texts["lbl_key"],
+                key="google_api_key",
+                type="password", help=j_help["key"])
+    
+    col_key_valid, col_key_cancel, col_key_help = st.columns([1, 1, 2])
+#
+    with col_key_valid:                                                                 # Validate API key button ********************************
+        if st.button("✔", use_container_width=True, help=j_help["kts"]):
+            if gemini_api_key_input:
+                if test_api_key_validity(gemini_api_key_input):
+                    st.session_state.gemini_api_key = gemini_api_key_input
+                else:
+                    st.warning("⚠⚠")
+                        
+    with col_key_cancel:                                                                # Cancel user API key button *****************************
+        if st.button("❌", use_container_width=True, help=j_help["kcn"]):
+            st.session_state.gemini_api_key = ""
+    with col_key_help:                                                                  # Get an API key help link *******************************
+        link=j_texts["lbl_kyw"]                                                         # Re-use of pathetic clean code
+        text=j_texts["lbl_ktx"]                                                         # to normalize help hyperlinks
+        st.markdown(f"{rght}<a href='{link}'>{text}</a></p>", unsafe_allow_html=True)   # 
+
+    st.image(pic_path("sepline.png"))
+
     st.image(pic_path("aiprof02.png"))
-
+    st.markdown(f"{cntr}{j_texts['app_crdts']}</p>", unsafe_allow_html=True)
 #
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 # Streamlit Interface : Header
@@ -280,7 +332,7 @@ with col_pic:
 # -------------------------------------------------------------------------------------------
 # Streamlit Interface : Age, Headcount, Mode row
 # -------------------------------------------------------------------------------------------
-col_age, col_headcount, col_mode = st.columns([2, 4, 2], border=True)		# Menu and slider for age, number, and mode **********
+col_age, col_headcount, col_mode = st.columns([2, 4, 2], border=True)		                # Menu and slider for age, number, and mode **********
 with col_age:
     i_age = st.selectbox(j_texts["lbl_age"], options=list(range(6, 18)), index=1, 
                        help=j_help["age"]
@@ -357,14 +409,15 @@ elif mode_selection == j_texts["lbl_smt"]:							# If checked mode is "Disciplin
     c_subject = j_prompt["subject"].format(t_subject=i_subject)
 elif mode_selection == j_texts["lbl_slb"]:                          # If checked mode is "Free"
     c_subject = j_prompt["subject"].format(t_subject=i_subject)
-
 c_public = j_prompt["public"].format(t_age=i_age)
 if i_age < 12:														# If low age input, check if appropriate
     c_public += j_prompt["appropriate"]
 answers = j_prompt["solution"]										# If work types requires answers for teacher
 c_headcount = j_prompt["number"].format(t_headcount=i_headcount)
-remediation = j_prompt["remediation"]										# Feeds Remediation, if later needed
+remediation = j_prompt["remediation"]								# Feeds Remediation, if later needed
 c_special = ""
+country = j_prompt["country"].format(t_country=j_texts["app_cntry"])# Specifies country for cultural and languages subtleties
+
 if i_special:														# If any specific instruction
     c_special = j_prompt["special"].format(t_special=i_special)
 #
@@ -415,7 +468,9 @@ if len(st.session_state.history) > 1:											    # Only display history if th
             unsafe_allow_html=True
         )
 # Lock history expander
-    if col_expand.button(j_texts["lbl_lck"], type="tertiary", use_container_width=True,
+    padlock = j_texts["lbl_ulk"]                                                    # Padlock is open by default
+    if st.session_state.expander_open: padlock = j_texts["lbl_lck"]                 # Case locked
+    if col_expand.button(padlock, type="tertiary", use_container_width=True,
                         help=j_help["lck"]
                         ):
         st.session_state.expander_open = not st.session_state.expander_open
@@ -427,13 +482,14 @@ if len(st.session_state.history) > 1:											    # Only display history if th
 #
     prompth, subjecth, typeh, ageh, headcounth, contenth = st.session_state.history[st.session_state.history_index]
     icon = j_buttons[typeh]["icon"] 											# Retrieves the icon from JSON
+
     with st.expander(f"{icon} {subjecth} ({j_buttons[typeh]['label']} - {headcounth}{j_stud}, {ageh}{j_old})",
                      expanded=st.session_state.expander_open
                     ):
         if LOG: st.markdown(f"**Prompt :** :red[*{prompth}*]")
         st.markdown(															# Displays the content of this history entry
             f"""
-            <div style="padding: 10px; border-radius: 10px; background-color: #f0f0f0;">
+            <div style="padding: 10px; border-radius: 10px; color: #000000; background-color: #f0f0f0;">
                 {contenth}
             </div>
             """,
@@ -452,5 +508,6 @@ if len(st.session_state.history) > 1:											    # Only display history if th
 # Footer image
 # ------------------------------------------------------------------------------------------------------------------------------------------------
 #
-st.image(pic_path("aiprof03.png"), caption=j_texts["app_crdts"])
+# st.image(pic_path("aiprof03.png"), caption=j_texts["app_crdts"])
+st.image(pic_path("aiprof03.png"))
 #

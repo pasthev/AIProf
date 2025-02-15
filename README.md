@@ -1,5 +1,8 @@
 # A.I. Prof - Votre Assistant d'Enseignement Intelligent
 
+[Click here for English](README-EN.md)
+
+
 [![Source sur GitHub](pics/aiprof01.png)](https://aiprof-pasthev.streamlit.app/)
 
 **[Lien vers l'application en ligne](https://aiprof-pasthev.streamlit.app/)**
@@ -77,6 +80,16 @@ L'utilisation d' **A.I. Prof** est simple et intuitive :
 **Important :**
 
 *   **Avertissement sur les Inexactitudes :**  Les réponses générées par l'IA peuvent parfois contenir des inexactitudes. Il est important de toujours vérifier et adapter le contenu généré avant de l'utiliser en contexte pédagogique.
+
+---
+
+## Aperçu des résultats proposés
+
+
+[![Source sur GitHub](screenshots/aiprof_screenshot_03.jpg)](https://aiprof-pasthev.streamlit.app/)
+
+[![Source sur GitHub](screenshots/aiprof_screenshot_04.jpg)](https://aiprof-pasthev.streamlit.app/)
+
 
 ---
 
